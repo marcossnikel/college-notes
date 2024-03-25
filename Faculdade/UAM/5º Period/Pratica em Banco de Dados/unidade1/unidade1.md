@@ -1,3 +1,5 @@
+Aqui estão suas anotações corrigidas e formatadas em Markdown:
+
 # Inspire-se
 
 ## Banco de Dados
@@ -27,125 +29,192 @@
 - Auxilia organizações na tomada de decisões mais eficientes.
 - Fundamentais no processo de gestão corporativa.
 
-#### Videoaula (Aula)
+### Videoaula (Aula)
 
-Manter banco de dados e de extrema importancia para qualquer sistema de informatica
+Manter banco de dados é de extrema importância para qualquer sistema de informática.
 
-Devido a sua impotancia e realizada por softwares especificos que armazenam banco de dados.
+Devido à sua importância, é realizada por softwares específicos que armazenam banco de dados.
 
-Esses softwares sao chamados de gerenciadores de banco de dados ou engines
+Esses softwares são chamados de gerenciadores de banco de dados ou engines.
 
-### os mais comum
+### Os mais comuns
 
--sql server
+- SQL Server
+- Oracle
+- MySQL
 
-- oracle
-- mySQL
+Além dos 3 maiores, também há o PostgreSQL e o MongoDB, mas basicamente o mercado se divide entre esses 3 gerenciadores.
 
-alem dos 3 maiores tem tambem o postgres, o mongoDB mas basicamente o mercado se divide entre esses 3 gerenciadores
+### Funções básicas
 
-### funcoes basicas
+- Armazenar dados
+- Garantir integridade dos dados (informação correta)
+- Parece simples, mas por exemplo, em um banco, uma transação de dinheiro ocorre problemas...
+- Integridade dos dados... Dinheiro pode sair da minha conta e não entrar na da outra pessoa, ou ele pode entrar na conta de outra pessoa e não ter saído da minha conta.
+- Se o dado perde a integridade ele já não é válido.
+- SGBD se preocupa muito com a garantia da integridade da informação armazenada.
+- SGBD deve possuir uma boa segurança, somente pessoas que têm acessos às informações podem acessá-las ou modificá-las.
+- Outra característica é a velocidade com que a informação é disponibilizada.
+- Dentro do SGBD, as informações são estruturadas seguindo o modelo relacional, ou seja, o modelo onde as tabelas são criadas com campos e chaves que se relacionam entre si.
+- É comum ter um código de um cliente em uma tabela onde os clientes estão armazenados, e em outra termos os pedidos com algo como clientId.
+- Esse código do cliente está presente nas duas tabelas para que possa buscar os pedidos de x cliente.
+- Essa relação implica na criação de índices, que garantem a velocidade na retirada das informações.
+- A maneira com que o DB organiza o índice impacta no desempenho...
 
-- armazenar dados
-- garantir integridade dos dados.. (info correta)
-- parece simples.. mas por ex um banco, uma transacao de dinheiro ocorre problemas...
-- integridade dos dados...Dinheiro pode sair da minha conta e nao entrar na da outra pessoa, ou ele pode entrar na conta de outra pessoa e nao ter saido da minha conta.
+### Problemas:
 
-- se o dado perde a integridade ele ja nao e valido
+- Tem que ser rápido... (a quantidade de dados armazenada por segundo é enorme e tem que ser rápido...)
+  Não adianta ser só rápido, tem que ter rotinas e índices corretos nas tabelas para que a informação seja disponibilizada de forma rápida e efetiva.
 
-- sgdb se preocupa muito com a garantia da integridade da info armazenada
+### Capítulo 2 - Transações e integridade
 
-- sgbd deve possuir uma boa seguranca, somente pessoas que tem acessos as informações possam acessa-las ou modifica-las
+A integridade é muito importante, uma das formas de garantir a integridade é com o uso das transações, que são componentes monolíticos formados por conjuntos de operações que vão acontecer no banco de dados, e tendo que acontecer TODAS ou nenhuma.
 
-- outra caracteristica e a velocidade o qual a info e disponibilizada
-- dentro do sgbd as informacoes sao estruturadas seguindo o modelo relacional. ou seja, o modelo onde as tabelas sao criadas com campos e chaves que se relacionam entre si.
+#### Transações
 
-- e comom ter um codigo de um cliente em uma tabela onde os clientes estao armazenados, e em outra termos os pedidos com algo como clientId
+Normalmente define-se com um programa em MySQL todos os bancos de dados hoje em dia falam essa linguagem...
 
-- esse codigo do cliente esta presente nas duas tabelas para q possa buscar os pedidos de x cliente
-- essa relacao implica na criacao de indices, que garante a velocidade na retirada das informacoes..
-- a maneira com que o db organiza o indice impacta no desempenho ...
+Começa uma transação com o comando BEGIN TRANSACTION. O que acontecer a partir desse ponto deve ser executado como um bloco único.
 
-### problemas:
+Retornando ao exemplo do banco, teremos a retirada do saldo de uma conta e incremento de outra... (transação)
 
-- tem q ser rapido... (a quantidade de dados armazenada por segundo e enorme e tem q se rapido..)
+São duas operações diferentes que vão acontecer no DB, em momentos diferentes, registros diferentes.... E podem envolver DIVERSAS TABELAS e atualizar todas delas na mesma transação.
 
-nao adianta ser so rapido, tem q ter rotinas e indices corretos nas tabelas para que a informacao seja disponibilizada de forma rapida e efetiva.
+De qualquer maneira, todas transações vão dentro de uma estrutura única começando com BEGIN TRANSACTION e no final vai-se ter o comando de COMMIT.
 
-### cap 2 - Transacoes e integridade
+O comando **COMMIT** faz que a transação seja gravada no DB.
 
-A integridade e muito imporatnte, uma das formas de garantir a integridade e com o uso dos transactions(transcoes), que sao componentes monoliticos formados por conjuntos de operacoes que vao acontecer no banco de dados, e tendo que acontecer TODAS ou nenhuma.
+O SGBD tem uma forma de garantir que todas sejam executadas ou nenhuma... Isso é feito através de **logs**, de registros do que estava sendo executado e ao executar o COMMIT, tudo que havia sido executado é gravado no banco de dados.
 
-#### Trasncoes
+Existe também o comando **ROLLBACK**, que é para cancelar uma transação....
 
-Normalmente define-se com um programa em mysql todos os bancos de dados hoje em dia falam essa linguagem...
+Em determinado momento, percebemos que uma transação não pode prosseguir e nesse caso o próprio sistema pode emitir um comando de ROLLBACK para abortar todas as transações que estavam sendo realizadas.
 
-Comeca uma transaco com o comando BEGIN TRANSACTINO. o que acontecer a partir desse ponto deve ser executado como um bloco unico
+Um exemplo de ROLLBACK é quando vamos fazer um saque bancário em uma máquina automática, e após colocar a senha o mesmo começa a ser executado, nesse momento o banco começa atualizar as tabelas no DB... Mas caso tenha algo que impeça a saída do dinheiro, nesse momento a máquina vai emitir um ROLLBACK e a transação terá que ser cancelada...
 
-rETORNANDO ao exemplo do banco, teremos a retirada do saldo de uma conta e incremento de outra... (transacao)
+O conceito de COMMIT e ROLLBACK é muito importante.
 
-sao duas operacao diferente que vao acontecer no db, em momentos diferentes, registros diferentes.... e podem envolver DIVERSAS TABELAS e atualizar todas delas na mesma tarnsaction
+As transações afetam várias tabelas, e com isso afetam os ÍNDICES delas...
 
-de qualque maneira, todas transactions vao dentro de uma estrutura unica comecando com begin transaction e no final vai-se ter o comando de commit.
+A fonte mais comum de problemas em DB, é a corrupção não de tabela, mas de índices da tabelas...
 
-o comando **commit** faz que a transaction seja gravada no db
+Falaremos mais de índices em otimizações de consultas e velocidade de execução de consultas, mas a garantia da integridade dos índices das tabelas é extremamente importante.
 
-o sgdb tem uma forma de garantir que todas sejam executadas ou nenhuma... Isso e feito atraves de **logs**, de registros do que estava sendo executado e ao executar o commit, tudo que havia sido executado e gravado no banco de dados.
+Outra coisa também muito importante é a criação dos logs que permitem a replicação dos bancos de dados.
 
-Existe tambem o comando **rollback**, que e para cancelar uma transacao....
+Uma empresa que tenha 2 DB em locais diferentes, para garantir a integridade nos 2 locais, tem que se garantir que as transações que ocorram
 
-Em determinado momento, percebsmo que uma transacao nao pode prossegrir e nesse caso o proprio sistema pode emitir um comando de rollback para abortar todas as transacoes que estavam sendo realizadas.
+em um lugar também sejam replicadas em outro lugar.
 
-um exemplo de rollback e quando vamos fazer um saque bancario em uma maquina automatica, e apos colocar a senha o mesmo comeca a ser executado, nesse momento o banco comeca atualizar as tabelas no db... Mas caso tenha algo que impeca a saida do money, nesse momento a maquina vai emitir um rollback e a transacao tera q ser cancelada...
+Para isso, os SGBD têm logs que são replicados em lugares diferentes... Então o conceito de TRANSACTION vai além de criar pequenos códigos que garantem todas as transações ocorram ao mesmo tempo...
 
-o conceito de commit e rollback e muito importante
+Logs permitem a integridade nos DBs diferentes, garantindo equidade em DBs localizados em locais diferentes.
 
-as transacoes afetam varias tabelas,e com isso afetas os INDICES delas...
+#### Capítulo 3 - Otimização e índices em tabelas
 
-a fonte mais comum de problmeas em db, e a corrupcao nao de tabela, mas de indices da tabelas...
+Como fazer para garantir que as informações sejam disponibilizadas na velocidade necessária?
 
-FALAREMOS mais de indices em otimizacoes de consultas e velocidade de execucao de consultas, mas a garantira da integridade dos indices das tabelas e extremamente importante.
+Nesse momento vem o conceito de **engines**, e o conceito de **índice** também se relacionando com a integridade.
 
-outra coisa tambem muito importante e criacao dos logs que permitem a replicacao dos bancos de dados.
+Por exemplo, um arquivo de documentos em papel, com milhares de pastas... Precisa localizar a pasta do cliente Armando... Se o arquivo não tiver organização localizá-lo vai demorar muito para encontrá-lo.
 
-uma empresa que tenhs 2 DB em locais diferentes , para garantir a integridade nos 2l ocais, tem que - se garantir que as transacoes que ocorram em um lugar tambem sejam replicadas em outro lugar.
+Se o arquivo tiver índice/organizado em ordem alfabética que seja... Será mais fácil... É comum também criar índices no DB... Caminhos que o sistema encontra para otimizar consultas.
 
-para isso, os sgdb tem logs q sao replicados em lugares diferentes... entao o conceito de TRANSACTION vai alem de criar pequenos codigos que garantem todas a s tnrascoes ocorram ao mesmo tempo...
+- Podemos definir no banco de dados o nome como uma palavra importante e criar um índice para buscar pelo nome.
 
-logs permitem a integridade nos dbs diferentes, garantindo equidade em dbs localizados em locais diferentes.
+Voltando ao exemplo das pastas... Você não tem o nome da pessoa mas sim o CPF... Toda a organização que foi feita não vai servir de nada. Terá que ver pasta por pasta até encontrar o determinado CPF...
 
-#### cap 3- otimizacao e indices em tabelas
+Em um banco de dados eletrônicos é mais fácil pois pode-se ter vários índices para a mesma tabela... Pode ter para o nome, para o CPF... Ambas buscas ficam rápidas.
 
-cOMO FAZ para garantir que as informacoes sejam disponibilizadas na velocidade necessaria?
+Pode-se criar também índices únicos, que possam garantir a integridade... O CPF, por exemplo, é comum indexar as tabelas de contatos e as tabelas de clientes pelo CPF e colocar a obrigação de que ele seja único.
 
-Nesse momento vem o conceito de **engines**, e o conceito de **indice** tambem se relacionando com a integridade.
+Isso significa que naquela tabela cada registro tem seu único CPF, se tenta duplicar dá erro...
 
-Por exemplo, um arquivo de documentos em papel, com milhares de pastas..... pRECISA Localizar a pasta do cliente Armando...se o arquivo nao tiver organizacao localiza-lo vai demorar muito para encontra-lo
+Porque teria 2 registros com mesmo CPF? Problema de integridade...
 
-Se o arquivo tiver indice/organizado em ordem alfabetica que seja... sera mais facil.. E comum tambem criar indices no dB... cAMINHOS q o sistema encontra para otimizar consultas
+Outra coisa, é que toda tabela tem uma chave primária. Essa chave primária é um campo ou um conjunto de campos que identifica unicamente aquele registro.
 
-- Podemos definir no banco de dados o nome como uma palavra importante e criar um indice para buscar pelo nome.
+Normalmente é um campo de código ou um conjunto de campos que faz com que o registro seja realmente único dentro da tabela.
 
-voltando ao exemplo das pastas... vc n tem o nome da pessoa mas sim o cpf.. toda a organizacao que foi feita nao vai servir de nada. Tera q ver pasta por pasta ate encontrar o determinado cpf...
+É essencial para a organização do DB e também a velocidade da informação.
 
-em um banco de dados eletronicos e mais facil pois pode-se ter varios indices para a mesma tabela... pode ter pro nome, pro cpf... ambas buscas ficam rapidas
+Ajuda com integridade e velocidade > ÍNDICES...
 
-pode-se criar tambem indices unicos, que possam garantir a integridade.. o cpf por exemplo, e comum indexar as tebals de contatos e as tabelas de clietnes pelo cpf e colocar a obrigacao de que ele seja unico
+Tem que colocar muito cuidado também com eles e não colocar em todos campos pois cada índice ocupa espaço e precisa ser criado quando criamos a tabela no banco de dados e armazena mais informação por conta do índice.
 
-isso significa q naquela tabela cada registro tem seu unico cpf, se tenta duplicar da erroo
+Cada índice também pode ser corrompido e quando ocorre uma corrupção de índice é um problema TENSO... O SGBD precisa do índice para funcionar adequadamente... Corrupção gera perda de dados.
 
-pq teria 2 registro com msm cpf? problema de integridade...
+Índices são utilizados para o que realmente deve ser utilizado para as buscas...
 
-Outra coisa, e que toda tabela tem uma chave primaria.Essa chave primaria e um campo ou um conjunto de campos que identifica unicamente aquele registro.
+Espero que isso ajude! Se precisar de mais alguma coisa, estou à disposição.
 
-normalmente e um campo de codigo ou um conujunto de cmapos que faz com que o registro seja realmente unico dentro da tabela.
+### GPT OVERVIEW
 
-e essencial para a organizacao do DB e tambem a velocidade da info
+Claro, aqui está a explicação dos comandos SQL em um único bloco Markdown:
 
-ajuda com integridade e velocidade > INDICES...
+````markdown
+### Comandos SQL
 
-Tem que colocar muito cuidado tambem com eles e nao colocar em todos campos pois cada indice ocupa esapco e precisa ser criado quando criamos a tabela no banco de dados e armazena mais informacao por conta do indice
+#### SELECT
 
-Cada indice tambem pode ser corrompido e quando ocorre uma corrupcao de indice e um problema TENSO... o sgdb precisa do indice para funcionar adequadramente... corrupcao gera perda de dados
+O comando `SELECT` é utilizado para recuperar dados de um banco de dados. Com ele, você pode especificar quais colunas deseja selecionar e de quais tabelas.
 
-indices sao utilizados para o que realmente deve ser utilizado para as buscas......
+Exemplo:
+
+```sql
+SELECT nome, sobrenome FROM clientes;
+```
+````
+
+Isso selecionará as colunas "nome" e "sobrenome" da tabela "clientes".
+
+#### INSERT
+
+O comando `INSERT` é utilizado para adicionar novos registros a uma tabela.
+
+Exemplo:
+
+```sql
+INSERT INTO clientes (nome, sobrenome) VALUES ('João', 'Silva');
+```
+
+Isso adicionará um novo cliente com nome "João" e sobrenome "Silva" à tabela "clientes".
+
+#### UPDATE
+
+O comando `UPDATE` é utilizado para modificar dados existentes em uma tabela.
+
+Exemplo:
+
+```sql
+UPDATE clientes SET sobrenome = 'Santos' WHERE id = 1;
+```
+
+Isso atualizará o sobrenome do cliente com ID igual a 1 para "Santos" na tabela "clientes".
+
+#### DELETE
+
+O comando `DELETE` é utilizado para excluir registros de uma tabela.
+
+Exemplo:
+
+```sql
+DELETE FROM clientes WHERE id = 1;
+```
+
+Isso excluirá o cliente com ID igual a 1 da tabela "clientes".
+
+#### BEGIN TRANSACTION, COMMIT e ROLLBACK
+
+Esses comandos são usados para controlar transações em bancos de dados relacionais.
+
+- `BEGIN TRANSACTION`: Inicia uma transação, indicando o início de um conjunto de operações que devem ser tratadas como uma unidade.
+- `COMMIT`: Confirma as operações realizadas durante uma transação, fazendo com que as alterações sejam permanentemente aplicadas ao banco de dados.
+- `ROLLBACK`: Cancela uma transação, revertendo todas as alterações feitas desde o início da transação.
+
+Esses comandos são cruciais para garantir a consistência e integridade dos dados em um banco de dados, especialmente em cenários onde várias operações precisam ser tratadas de forma atômica, ou seja, todas ocorrem ou nenhuma ocorre.
+
+```
+
+Essa é a explicação dos comandos SQL em um único bloco Markdown. Se precisar de mais alguma coisa, estou à disposição para ajudar!
+```
