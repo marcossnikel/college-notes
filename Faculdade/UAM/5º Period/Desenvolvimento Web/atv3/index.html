@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atividade faculdade</title>
+  </head>
+  <body>
+    <form action="cadastrarProduto()">
+      <h1>Cadastro de produto</h1>
+      <p>Inclua as informações do produto abaixo</p>
+      <label for="product_name">Nome do produto:</label>
+      <input type="text" id="product_name" />
+      <br />
+      <label for="product_description">Descrição do produto:</label>
+      <input type="text" id="product_description" />
+      <br />
+      <label for="product_price">valor do produto:</label>
+      <input type="text" id="product_price" />
+      <br />
+      <label for="fornecedor">fornecedor:</label>
+      <input type="text" id="fornecedor" />
+      <button>Cadastrar</button>
+    </form>
+  </body>
+</html>
+
+<script>
+  function cadastrarProduto() {
+    const product_name = document.getElementById("product_name").value;
+    const product_description = document.getElementById(
+      "product_description"
+    ).value;
+    const product_price = document.getElementById("product_price").value;
+    const fornecedor = document.getElementById("fornecedor").value;
+
+    const data = {
+      product_name,
+      product_description,
+      product_price,
+      fornecedor,
+    };
+
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:3000/products",
+      data: data,
+      success: function (response) {
+        console.log(response);
+      },
+    });
+  }
+</script>
